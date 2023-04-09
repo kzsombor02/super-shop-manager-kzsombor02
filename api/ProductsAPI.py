@@ -47,7 +47,7 @@ class single_product(Resource):
        else:
            return jsonify("Not found")
 
-
+    @ProductAPI.doc(descripiton="changing stock", params={"quantity": "quantity"})
     def put(self,product_id):
         quantity = request.args["quantity"] # get the quantity
         if my_shop.changeStock(product_id,quantity): # if the stock is changed successfully
