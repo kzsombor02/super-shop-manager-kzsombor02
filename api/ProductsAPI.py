@@ -99,15 +99,11 @@ class GetProducts(Resource):
 
 @ProductsAPI.route("/reorder")
 class Reorder(Resource):
-    @ProductsAPI.doc(descripiton="reordering items", params={"product_id": "Product id", "quantity": "quantity"})
+    @ProductsAPI.doc(descripiton="reordering items", params={"product_id": "Product id"})
     def get(self):
         args = request.args
         product_id = args["product_id"]
-        quantity = args["quantity"]
-        if my_shop.reorderProduct(product_id,quantity):
-            return jsonify("Reorder was successful")
-        else:
-            return jsonify("Product not found")
+        return jsonify (my_shop.reorderProduct(product_id))
 
 
 

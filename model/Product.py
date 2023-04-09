@@ -7,6 +7,8 @@ class Product():
         self.category = category
         self.quantity = 0
         self.price = price
+        self.threshold = 0
+
 
 
 

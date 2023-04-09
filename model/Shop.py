@@ -69,6 +69,7 @@ class Shop:
             if product.product_id == product_id: # checking if the id is the same as the one in the arguments
                 if product.quantity >= int(quantity): # checking if there is enough quantity
                     product.quantity -= int(quantity)  # substracting the quantity of the product
+                    product.threshold += int(quantity)
                     purchase_history = {
                         "customer_id": customer_id,
                         "product_id": product_id,
@@ -87,12 +88,14 @@ class Shop:
                 return True
         return False
 
-    def reorderProduct(self, product_id, quantity):
+    def reorderProduct(self, product_id):
+        must_reorder = []
         for product in self.products:
             if product.product_id == product_id: # checking if the id is the same as the one in the arguments
-                product.quantity += int(quantity) # adding the quantity to the product
-                return True
-        return False
+                if product.quantity < product.threshold:
+                    must_reorder.append(product)
+        return must_reorder
+
 
 
 
