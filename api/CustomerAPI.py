@@ -190,7 +190,7 @@ class Coupons(Resource):
 
     @CouponsAPI.doc(description="Get all valid coupons")
     def get(self):
-        return jsonify(my_shop.getCoupons())
+        return jsonify(my_shop.getCoupons()) # get all valid coupons
 
 
 
@@ -218,7 +218,7 @@ class CustomerVerficiation(Resource):
 @CustomerAPI.route('/pwreset')
 class CustomerPWReset(Resource):
     @CustomerAPI.doc(
-        description="Generate a temporary password and send via email.", )
+        description="Generate a temporary password and send via email.",params={'customer_id': 'Customer ID'} )
     def post(self):
         customer_id = request.args["customer_id"] # get customer id
         c = my_shop.getCustomer(customer_id) # get customer
@@ -227,7 +227,7 @@ class CustomerPWReset(Resource):
     @CustomerAPI.doc(
         description="Allow password reset based on the temporary password",
         params={'temp_pw': 'Password sent by email',
-                'new_pw': 'New password'})
+                'new_pw': 'New password',"customer_id": "Customer ID"})
     def put(self):
         args = request.args
         customer_id = args["customer_id"]

@@ -11,7 +11,7 @@ ProductAPI = Namespace('product',
 
 @ProductAPI.route('/')
 class AddProductA(Resource):
-    @ProductAPI.doc(params={'name': 'Product name',
+    @ProductAPI.doc(descripiton= "Adding products" ,params={'name': 'Product name',
                             'expiry': 'expiry date',
                             'category': 'product category',
                             "product_id": "product_id",
@@ -30,10 +30,10 @@ class AddProductA(Resource):
 
         new_product = Product(product_id,name,serial_num, expiry, category,price)
         # add the product
-        if my_shop.getProductById(product_id):
+        if my_shop.getProductById(product_id): # if the product already exists
             return jsonify("Product with the id already exists")
         else:
-            my_shop.addProduct(new_product)
+            my_shop.addProduct(new_product) # add the product to the shop
             return jsonify(new_product)
 
 
@@ -42,28 +42,29 @@ class AddProductA(Resource):
 @ProductAPI.route("/<product_id>")
 class single_product(Resource):
     def delete(self,product_id):
-       if my_shop.deleteProduct(product_id):
+       if my_shop.deleteProduct(product_id): # if the product is deleted successfully
            return jsonify("Deleted")
        else:
            return jsonify("Not found")
 
 
     def put(self,product_id):
-        quantity = request.args["quantity"]
-        if my_shop.changeStock(product_id,quantity):
+        quantity = request.args["quantity"] # get the quantity
+        if my_shop.changeStock(product_id,quantity): # if the stock is changed successfully
             return jsonify("Stock was changed!")
         else:
             return jsonify("Product does not exist!")
 
     def get(self,product_id):
-        if my_shop.getProductById(product_id):
-            return jsonify(my_shop.getProductById(product_id))
+        if my_shop.getProductById(product_id): # if the product is found
+            return jsonify(my_shop.getProductById(product_id)) # return the product
         else:
             return jsonify("Product does not exist!")
 
 
 @ProductAPI.route("/sell")
 class sellProduct(Resource):
+    @ProductAPI.doc(descripiton="selling items", params={"customer_id": "Customer id", "product_id": "Product id", "quantity": "quantity"})
     def put(self):
         customer_id = request.args["customer_id"]
         product_id = request.args["product_id"]
@@ -75,6 +76,7 @@ class sellProduct(Resource):
 
 @ProductAPI.route("/remove")
 class removeProduct(Resource):
+    @ProductAPI.doc(descripiton="removing items", params={"product_id": "Product id", "reason": "reason for removal"})
     def put(self):
         args = request.args
         product_id = args["product_id"]
@@ -97,6 +99,7 @@ class GetProducts(Resource):
 
 @ProductsAPI.route("/reorder")
 class Reorder(Resource):
+    @ProductsAPI.doc(descripiton="reordering items", params={"product_id": "Product id", "quantity": "quantity"})
     def get(self):
         args = request.args
         product_id = args["product_id"]
